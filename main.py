@@ -1,17 +1,32 @@
 import telebot
 import config
 import base64
+import logger
 bot = telebot.TeleBot(config.TOKEN)
 
 
 @bot.message_handler(commands='encode_bs64')
 def encode_bs64(message):
-    bot.reply_to(message, base64.encodebytes(bytes(message.text[13:], 'utf-8')))
+    try:
+        bot.reply_to(message, base64.encodebytes(bytes(message.text[13:], 'utf-8')))
+    except Exception as e:
+        if hasattr(e, 'message'):
+            logger.error(e.message)
+        else:
+            logger.error(e)
+        bot.reply_to(message, 'Something went wrong with incoming data, please validate data')
 
 
 @bot.message_handler(commands='decode_bs64')
 def encode_bs64(message):
-    bot.reply_to(message, base64.decodebytes(bytes(message.text[13:], 'utf-8')))
+    try:
+        bot.reply_to(message, base64.decodebytes(bytes(message.text[13:], 'utf-8')))
+    except Exception as e:
+        if hasattr(e, 'message'):
+            logger.error(e.message)
+        else:
+            logger.error(e)
+        bot.reply_to(message, 'Something went wrong with incoming data, please validate data')
 
 
 @bot.message_handler(commands='help_command')
